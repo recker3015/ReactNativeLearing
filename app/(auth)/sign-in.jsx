@@ -6,16 +6,25 @@ import images from "../../constants/images";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { Link } from "expo-router";
-
+import { SignInUser } from "../../lip/appwrite";
+import { router } from "expo-router";
 const SignIn = () => {
   const [form, setFrom] = useState({
     email: "",
     password: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const submit = () => {
-    // setIsSubmitting(!isSubmitting);
-    console.log(form);
+  const submit = async () => {
+    setIsSubmitting(true);
+
+    try {
+      await SignInUser(form.email, form.password);
+      router.replace("/home");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   return (
     <SafeAreaView className="bg-primary h-full">

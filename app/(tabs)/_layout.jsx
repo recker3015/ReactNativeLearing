@@ -97,6 +97,21 @@ const TabsLayout = () => {
           ),
         }}
       />
+      <Tabs.Screen
+        name="user"
+        options={{
+          title: "User",
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon
+              icon={icons.upload}
+              focused={focused}
+              color={color}
+              name="Profile"
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 };

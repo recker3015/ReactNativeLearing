@@ -1,4 +1,4 @@
-import { Text, View, ScrollView, Image } from "react-native";
+import { Text, View, ScrollView, Image, Alert } from "react-native";
 import { React, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
@@ -6,16 +6,30 @@ import images from "../../constants/images";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { Link } from "expo-router";
-const SignIn = () => {
+import { createUser } from "../../lip/appwrite";
+import { router } from "expo-router";
+const SignUp = () => {
   const [form, setFrom] = useState({
     username: "",
     email: "",
     password: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const submit = () => {
-    // setIsSubmitting(!isSubmitting);
-    console.log(form);
+  const submit = async () => {
+    if (!form.username || !form.email || !form.password) {
+      Alert.alert("Please fill all the fields");
+    }
+    setIsSubmitting(true);
+    try {
+      console.log(form);
+      const result = await createUser(form.email, form.password, form.username);
+
+      router.replace("/home");
+    } catch (error) {
+      Alert.alert(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -55,7 +69,7 @@ const SignIn = () => {
 
           <CustomButton
             className={`${isSubmitting ? "opacity-50" : ""}`}
-            title={isSubmitting ? "Please wait" : "Login"}
+            title={isSubmitting ? "Please wait" : "SignUp"}
             handlePress={submit}
             containerStyle="w-full mt-7"
             isLoading={isSubmitting}
@@ -75,4 +89,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;
