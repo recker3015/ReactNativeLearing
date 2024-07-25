@@ -17,6 +17,17 @@ export const config = {
   videoCollectionId: "6698e531003bc46b7c83",
   storageId: "6698e6ad003340c8c49a",
 };
+
+const {
+  endpoint,
+  platform,
+  projectId,
+  databaseId,
+  userCollectionId,
+  videoCollectionId,
+  storageId,
+} = config;
+
 // Init your React Native SDK
 const client = new Client();
 
@@ -80,5 +91,29 @@ export const getCurrentUser = async () => {
   } catch (error) {
     console.log(error);
     throw new Error(error);
+  }
+};
+
+export const getAllPosts = async () => {
+  try {
+    console.log("Posts Fetching...");
+
+    const posts = await databases.listDocuments(databaseId, videoCollectionId);
+    return posts.documents;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getLatestPost = async () => {
+  try {
+    console.log("Latest Fetching...");
+
+    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
+      Query.orderDesc("$createdAt", Query.limit(7)),
+    ]);
+    return posts.documents;
+  } catch (error) {
+    console.log(error);
   }
 };
